@@ -29,7 +29,7 @@ u8 button_timeout=255;//按键时间标志
 long int Time_1ms=0;//时间轴
 //****************************************************************
 u8 Road_Status_Flag=0;
-u8 Switch_Status;//拨码状态
+u16 Switch_Status;//拨码状态
 u8 Key_status;//按键状态
 u8 LCD_DISPLAY_FLAG=1;
 u8 Motor_enable_Flag=1;
@@ -79,7 +79,7 @@ void main()
   Motor1_PID.target=Speed_goal1;
   Motor2_PID.target=Speed_goal2;
   Duty_Motor1=10000;
-  Duty_Motor2=10000;
+  Duty_Motor2=60000;
 while(1)
 {
   Motor2_PID.P=P_TEMP2;
@@ -87,22 +87,16 @@ while(1)
   Key = KEY_Scan();
   if(Key == KEY1_PRES)
   {
-    LCD_init(FALSE);
-    Disp_single_colour(White);
-    LCD_DISPLAY_FLAG = 1;
+//    LCD_init(FALSE);
+//    Disp_single_colour(White);
+//    LCD_DISPLAY_FLAG = 1;
+    Beep_Once(&Image_Island_Test_Beep);
   }
   else if(Key == KEY2_PRES)
   {
-    LCD_DISPLAY_FLAG = 0;
-  }
-  else if(Key == KEY3_PRES)
-  {
-    Beep_Once(&Image_Island_Test_Beep);
+//    LCD_DISPLAY_FLAG = 0;
     Key_Start_Flag = 1;
-  }
-  else if(Key == KEY_Stop_PRES)
-  {
-
+    Beep_Once(&Image_Island_Test_Beep);
   }
 //摄像头采集一次
 //图像处理  

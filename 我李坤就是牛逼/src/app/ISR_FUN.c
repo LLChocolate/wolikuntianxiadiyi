@@ -78,5 +78,5 @@ void Servo_Diff_PID(void)
     Servo_PID.D = stand_d;
   }
   Diff_PID_Process(&Servo_PID);
-  cmt_pwm_duty(Servo_PID.result+SERVO_MIDDLE);
+  FTM_PWM_Duty(STEER_,Servo_PID.result+SERVO_MIDDLE);
 }

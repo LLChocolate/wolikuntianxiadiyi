@@ -4,15 +4,13 @@
 void dial_switch_Init(void)
 {
   gpio_init(PORTB,0,GPI,LOW);
-  gpio_init(PORTA,29,GPI,LOW);
-  gpio_init(PORTA,28,GPI,LOW);
-  gpio_init(PORTA,27,GPI,LOW);
-  gpio_init(PORTA,26,GPI,LOW);
-  gpio_init(PORTA,25,GPI,LOW);
-  port_init_NoALT(PTA25,PULLUP);
-  gpio_init(PORTA,24,GPI,LOW);
-  port_init_NoALT(PTA24,PULLUP);
-  gpio_init(PORTA,19,GPI,LOW);
+  gpio_init(PORTB,1,GPI,LOW);
+  gpio_init(PORTB,2,GPI,LOW);
+  gpio_init(PORTB,3,GPI,LOW);
+  gpio_init(PORTB,4,GPI,LOW);
+  gpio_init(PORTB,5,GPI,LOW);
+  gpio_init(PORTB,6,GPI,LOW);
+  gpio_init(PORTB,7,GPI,LOW);
 
 }
 

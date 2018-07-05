@@ -41,14 +41,14 @@ void VSYNC_IRQ(void)
       if(Memory_use_Flag==2)
       {
         Memory_use_Flag=1;
-        DMA_PORTx2BUFF_Init(CAMERA_DMA_CH, (void *)&PTC_BYTE1_IN, (void *)Image_fire_Memory2, PTB22, DMA_BYTE1, CAMERA_SIZE , DMA_falling);
+        DMA_PORTx2BUFF_Init(CAMERA_DMA_CH, (void *)&PTB_BYTE2_IN, (void *)Image_fire_Memory2, PTA26, DMA_BYTE1, CAMERA_SIZE , DMA_falling);
         DMA_DADDR(CAMERA_DMA_CH) = (u32)Image_fire_Memory2; //恢复地址
       }
       //如果之前图像处理使用的存储区是1，则DMA传输的位置是2，则此时把传输位置改为1
       else if(Memory_use_Flag==1)
       {
         Memory_use_Flag=2;
-        DMA_PORTx2BUFF_Init(CAMERA_DMA_CH, (void *)&PTC_BYTE1_IN, (void *)Image_fire_Memory1, PTB22, DMA_BYTE1, CAMERA_SIZE , DMA_falling);
+        DMA_PORTx2BUFF_Init(CAMERA_DMA_CH, (void *)&PTB_BYTE2_IN, (void *)Image_fire_Memory1, PTA26, DMA_BYTE1, CAMERA_SIZE , DMA_falling);
         DMA_DADDR(CAMERA_DMA_CH) = (u32)Image_fire_Memory1; //恢复地址
       }
         DMA_EN(CAMERA_DMA_CH);            		//使能通道CHn 硬件请求
@@ -95,23 +95,7 @@ void SysTick_Handler(void)
 }
 void USART1_IRQHandler()
 {
-  
-}
-
-void USART2_IRQHandler()
-{
-
-  
-}
-  
-
-void USART3_IRQHandler()
-{
-
-}
-void USART5_IRQHandler()
-{
-    static u8 b_cnt=0;
+      static u8 b_cnt=0;
 enum
   {
     Motor,
@@ -292,6 +276,22 @@ enum
   EnableInterrupts;
 }
 
+void USART2_IRQHandler()
+{
+
+  
+}
+  
+
+void USART3_IRQHandler()
+{
+
+}
+void USART5_IRQHandler()
+{
+
+}
+
 
 void PIT0_IRQHandler()
 {
@@ -345,6 +345,7 @@ void PIT0_IRQHandler()
     {
       Island.State = NoIsland;//清标志
       Island.In_Center = 0;
+      Island.Stay_Center = 0;
       Island.In2Stay_cnt = 0;
       Island.Out_Center = 0;
       Island.Out_Allow_flag = 0;
@@ -385,30 +386,26 @@ void PIT0_IRQHandler()
 //***************************END******************
   
 //按键消抖
-    if(button_timeout<16)
-    {
-      button_timeout--;
-    }
-  if(button_timeout==0)//延时10ms检测按键状态
-  {
-      if(KEY1==0)
-      {
-        Reduct_Flag=1;
-        Key_status=KEY1_PRES;
-//        BEEP=1;
-        LED1=0;
-      }
-      else if(KEY2==0)
-      {
-        Key_Start_Flag=1;
-        Key_status=KEY2_PRES;
-        LED2=0;
-      }
-      else if(KEY3==0)
-      {
-        Key_status=KEY3_PRES;
-      }
-  }
+//    if(button_timeout<16)
+//    {
+//      button_timeout--;
+//    }
+//  if(button_timeout==0)//延时10ms检测按键状态
+//  {
+//      if(KEY1==0)
+//      {
+//        Reduct_Flag=1;
+//        Key_status=KEY1_PRES;
+////        BEEP=1;
+//        LED1=0;
+//      }
+//      else if(KEY2==0)
+//      {
+//        Key_Start_Flag=1;
+//        Key_status=KEY2_PRES;
+//        LED2=0;
+//      }
+//  }
 
 //按键消抖函数结束
 //*********************************************十字延时******************************************
@@ -430,9 +427,9 @@ void PIT0_IRQHandler()
 //****************************************************测速函数
   if(TimeCnt_5ms==2&&Blue_Start_Flag==1)//20ms执行一次
   {
-    Get_speed2(&Motor2);
+    Get_speed1(&Motor2);
     Speed_output();
-    if(L_AD_Sum<200&&L_AD_Sum<200)
+    if(L_AD_Sum<500&&L_AD_Sum<500)
     {
 //      Blue_Start_Flag = 0;
       Beep_Once(&Image_Island_Test_Beep);

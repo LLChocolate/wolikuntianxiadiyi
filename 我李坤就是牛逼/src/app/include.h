@@ -95,7 +95,7 @@ extern long int Time_1ms;//时间轴
 //****************************************************************
 
 extern u8 Road_Status_Flag;//道路形状判断标志
-extern u8 Switch_Status;//拨码状态
+extern u16 Switch_Status;//拨码状态
 extern u8 Key_status;//按键状态
 extern u8 LCD_DISPLAY_FLAG;
 extern u8 Image_Flag;

@@ -3,7 +3,7 @@
 Beep_Str Image_Island_Test_Beep={.Delay_const=20};
 void myBEEP_Init(void)
 {
-  gpio_init(PORTD,6,GPO,LOW);
+  gpio_init(PORTE,24,GPO,LOW);
   BEEP_Open_once();
 } 
 

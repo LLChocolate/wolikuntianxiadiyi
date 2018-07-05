@@ -15,10 +15,10 @@
 
 
 //引脚连接定义//SDO引脚可以不连接
-#define  reset   PTE11_OUT       //复位
-#define  dcx     PTE12_OUT      //地址/数据切换
-#define  sdi     PTE10_OUT      // SDI  MOSI
-#define  scl     PTE9_OUT      //时钟
+#define  reset   PTE10_OUT       //复位
+#define  dcx     PTE11_OUT      //地址/数据切换
+#define  sdi     PTE9_OUT      // SDI  MOSI
+#define  scl     PTE8_OUT      //时钟
 
 //位域
 #define GET_BITFIELD(addr) (volatile bit_field *)(&addr)//返回的是指针

@@ -20,23 +20,23 @@ volatile u8 img_flag = IMG_FINISH;		//图像状态
 void Ov7725_exti_Init()
 {
     //FIFO端口初始化  PC8~15
-    gpio_init(PORTC,8, GPI, HIGH);
-    gpio_init(PORTC,9, GPI, HIGH);
-    gpio_init(PORTC,10, GPI, HIGH);
-    gpio_init(PORTC,11, GPI, HIGH);
-    gpio_init(PORTC,12, GPI, HIGH);
-    gpio_init(PORTC,13, GPI, HIGH);
-    gpio_init(PORTC,14, GPI, HIGH);
-    gpio_init(PORTC,15, GPI, HIGH);
+    gpio_init(PORTB,16, GPI, HIGH);
+    gpio_init(PORTB,17, GPI, HIGH);
+    gpio_init(PORTB,18, GPI, HIGH);
+    gpio_init(PORTB,19, GPI, HIGH);
+    gpio_init(PORTB,20, GPI, HIGH);
+    gpio_init(PORTB,21, GPI, HIGH);
+    gpio_init(PORTB,22, GPI, HIGH);
+    gpio_init(PORTB,23, GPI, HIGH);
     //DMA通道0初始化，PTB22下降沿触发DMA传输，源地址为PTC_BYTE1_IN，目的地址为：Image_fire ，每次传输1Byte，传输CAMERA_SIZE次后停止传输
-    DMA_PORTx2BUFF_Init(CAMERA_DMA_CH, (void *)&PTC_BYTE1_IN, (void *)(Image_fire_Memory1), PTB22, DMA_BYTE1, CAMERA_SIZE , DMA_falling);//KEEPON,DMA_falling
+    DMA_PORTx2BUFF_Init(CAMERA_DMA_CH, (void *)&PTB_BYTE2_IN, (void *)(Image_fire_Memory1), PTA26, DMA_BYTE1, CAMERA_SIZE , DMA_falling);//KEEPON,DMA_falling
     Image_fire=&Image_fire_Memory1[0];
     DMA_DIS(CAMERA_DMA_CH); 
 	
     DMA_IRQ_CLEAN(CAMERA_DMA_CH);
     DMA_IRQ_EN(CAMERA_DMA_CH);
-    port_init(PTB22,DMA_FALLING | PULLUP );    //PCLK
-    port_init(PTD2, IRQ_FALLING| PULLUP | PF);    //场中断，下拉，下降沿触发中断，带滤波
+    port_init(PTA26,DMA_FALLING | PULLUP );    //PCLK
+    port_init(PTD14, IRQ_FALLING| PULLUP | PF);    //场中断，下拉，下降沿触发中断，带滤波
     disable_irq(90);						//关闭PTD的中断
 }
 

@@ -13,7 +13,7 @@ u8  Start_line_cnt   = 0;
 
 u8  road_filter_flag = 0;
 Filter_1st_Str Center_Filter = {0.8,{0,0},{0,0}};
-Filter_1st_Str In_Island_Center_Filter = {0.6,{0,0},{0,0}};
+Filter_1st_Str In_Island_Center_Filter = {0.7,{0,0},{0,0}};
 //Kalman_Date Center_Filter={0,0,0,0,0,0.1,40,0,0};
 
 u8 Cross_flag;
@@ -396,21 +396,16 @@ void get_three_lie(void)
 u8 CenterlineToDiff(int center)
 {
   int real_center;
-  int In_Island_center;
   if(diff_done_flag == 1)return 0;
   
 
 //*********************对中心点均值滤波*************************************  
   
   real_center = filter_1st(center,&Center_Filter);
-  In_Island_center = filter_1st(center,&In_Island_Center_Filter);
   diff_done_flag = 1;
   if(Island.State==Left_Island_pre
      ||Island.State==Right_Island_pre)
     Diff_error = 160 - real_center;
-  else if(Island.State==Left_Island_in
-     ||Island.State==Left_Island_in)
-    Diff_error = 160 - In_Island_center;
   else
     Diff_error = 160 - center;
   
@@ -448,9 +443,10 @@ u8 double_AD(void)
 
 u8 In_double_AD(void)
 {
-  if(((L_AD_Ave>900)&&(R_AD_Ave>1900))
-     ||((L_AD_Ave>1900)&&(R_AD_Ave>900))
-     ||(L_AD_Ave+R_AD_Ave>3200))
+  if(((L_AD_Ave>3500)&&(R_AD_Ave>1100))
+     ||((L_AD_Ave>1100)&&(R_AD_Ave>3500))
+     ||(L_AD_Ave+R_AD_Ave>5000))
+//  if((L_AD_Ave>3500)||(R_AD_Ave>3500))
   {
     return 1;
   }
@@ -462,8 +458,8 @@ u8 In_double_AD(void)
 
 u8 Out_double_AD(void)
 {
-  if((R_AD_Ave>2000)
-     ||(L_AD_Ave>2000))
+  if((R_AD_Ave>3500)
+     ||(L_AD_Ave>3500))
   {
     return 1;
   }
@@ -500,6 +496,7 @@ u8 Elec_Island(void)
   {
     if(Out_double_AD()==1)
     {
+//      Beep_Once(&Image_Island_Test_Beep);
       Island.State = Left_Wait_Next;//等待下一个环岛的时间间隔
       Island.Next_Island_flag = 1;
       Island.Next_Island_flag_delay = Island.Next_Island_flag_delay_const;
@@ -510,6 +507,7 @@ u8 Elec_Island(void)
   {
     if(Out_double_AD()==1)
     {
+//      Beep_Once(&Image_Island_Test_Beep);
       Island.State = Right_Wait_Next;//等待下一个环岛的时间间隔
       Island.Next_Island_flag = 1;
       Island.Next_Island_flag_delay = Island.Next_Island_flag_delay_const;
@@ -538,12 +536,14 @@ u8 In_Island(void)
         if(Island.State==Left_Island_pre)
         {
           Island.State = Left_Island_in;
+          Island.Stay_Center = 50;
           Island.Stay2Out_flag = 1;
           Island.Stay2Out_flag_delay = Island.Stay2Out_flag_delay_const;
         }
         else if(Island.State==Right_Island_pre)
         {
           Island.State = Right_Island_in;
+          Island.Stay_Center = 269;
           Island.Stay2Out_flag = 1;
           Island.Stay2Out_flag_delay = Island.Stay2Out_flag_delay_const;
         }
@@ -742,13 +742,25 @@ u8 Stay_Island(void)
   {
     get_black_line(Image_fire[Image_lie.Three_lie_end[1]+3],Image_lie.Three_lie_end[1]+3);
   }
-  CenterlineToDiff(Image_hang.center[Image_hang.hang_use]);
+  
+  if(Island.State==Left_Island_in
+     &&Image_hang.center[Image_hang.hang_use]<Image_lie.Three_Lie[1]-10)//判断值有效
+  {
+    Island.Stay_Center = filter_1st(Image_hang.center[Image_hang.hang_use],&In_Island_Center_Filter);
+  }
+  else if(Island.State==Right_Island_in
+     &&Image_hang.center[Image_hang.hang_use]>Image_lie.Three_Lie[1]+10)//判断值有效
+  {
+    Island.Stay_Center = filter_1st(Image_hang.center[Image_hang.hang_use],&In_Island_Center_Filter);
+  }
+  
+  CenterlineToDiff(Island.Stay_Center);
   
   if(center_Period > (Island_Center_Period_Const - 1))
     center_Period = 0;
 
   Center_Sum  -= Center_[center_Period];
-  Center_[center_Period] = Image_hang.center[Image_hang.hang_use];
+  Center_[center_Period] = Island.Stay_Center;
   Center_Sum  += Center_[center_Period];
   center_Period++;  
   
@@ -789,7 +801,7 @@ u8 Out_Island(void)
   center_impulse = Out_Island_Test(&Start_End,&End_End);
   if(Island.State==Right_Island_out)//补线
   {
-    center_use = ((center_impulse - (center_impulse - 0)*(End_End - Start_Point)*1.0/(End_End - Start_End)) + 319)/2-20;
+    center_use = ((center_impulse - (center_impulse - 0)*(End_End - Start_Point)*1.0/(End_End - Start_End)) + 319)/2-10;
     if((center_impulse!=-1) && (center_use>Image_lie.Three_Lie[1]+60))//有效性检验
     {
 //      Beep_Once(&Image_Island_Test_Beep);
@@ -811,6 +823,7 @@ u8 Out_Island(void)
     }
     else if((center_impulse!=-1)&&End_End<Start_Point-15)
     {
+//      Beep_Once(&Image_Island_Test_Beep);
       Image_hang.hang_use = 0;
       get_black_line(Image_fire[Start_Point],Start_Point);//45cm处中心点
       if(Image_lie.Three_lie_end[0]>Image_hang.hang_use+5
@@ -848,9 +861,10 @@ u8 Out_Island(void)
   }
   else if(Island.State==Left_Island_out)
   {
-    center_use = ((center_impulse - (center_impulse - 319)*(End_End - Start_Point)*1.0/(End_End - Start_End)) + 0)/2+25;
-    if((center_impulse!=-1)&&(center_use<Image_lie.Three_Lie[1]-60))//有效性检验
+    center_use = ((center_impulse - (center_impulse - 319)*(End_End - Start_Point)*1.0/(End_End - Start_End)) + 0)/2 - 30;
+    if((center_impulse!=-1)&&(center_use<Image_lie.Three_Lie[1]-90))//有效性检验
     {
+//      Beep_Once(&Image_Island_Test_Beep);
       if(center_use < 35)
         center_use = 35;
       CenterlineToDiff(center_use);
@@ -877,24 +891,24 @@ u8 Out_Island(void)
       {
         get_black_line(Image_fire[Image_lie.Three_lie_end[1]+3],Image_lie.Three_lie_end[1]+3);
       }
-      if(Image_hang.center[Image_hang.hang_use]<Image_lie.Three_Lie[1]-60)
+      if(Image_hang.center[Image_hang.hang_use]<Image_lie.Three_Lie[1]-90)
         CenterlineToDiff(Image_hang.center[Image_hang.hang_use]);
-      else if(Island.Out_Center/Island_Center_Period_Const<Image_lie.Three_Lie[1]-60)
+      else if(Island.Out_Center/Island_Center_Period_Const<Image_lie.Three_Lie[1]-90)
         CenterlineToDiff(Island.Out_Center/Island_Center_Period_Const);
       else 
       {
-        CenterlineToDiff(Image_lie.Three_Lie[1]-80);
-//        Beep_Once(&Image_Island_Test_Beep);
+        CenterlineToDiff(Image_lie.Three_Lie[1]-110);
+        Beep_Once(&Image_Island_Test_Beep);
       }
     }
     else//补线失败，使用之前保存的中心点
     {
-      if(Island.Out_Center/Island_Center_Period_Const<Image_lie.Three_Lie[1]-60)
+      if(Island.Out_Center/Island_Center_Period_Const<Image_lie.Three_Lie[1]-90)
         CenterlineToDiff(Island.Out_Center/Island_Center_Period_Const);
       else 
       {
-        CenterlineToDiff(Image_lie.Three_Lie[1]-80);
-//        Beep_Once(&Image_Island_Test_Beep);
+        CenterlineToDiff(Image_lie.Three_Lie[1]-110);
+        Beep_Once(&Image_Island_Test_Beep);
       }
 //调试用，显示中心点
       if(LCD_DISPLAY_FLAG==1)

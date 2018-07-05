@@ -2,8 +2,8 @@
 
 void myLED_Init(void)
 {
-  gpio_init(PORTD,5,GPO,HIGH);
-  gpio_init(PORTD,3,GPO,HIGH);
+  gpio_init(PORTD,0,GPO,HIGH);
+  gpio_init(PORTD,2,GPO,HIGH);
 }
 
 

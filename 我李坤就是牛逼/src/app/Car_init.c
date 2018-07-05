@@ -11,11 +11,9 @@ void System_Init()
   pit_init_ms(PIT0,1);
   dial_switch_Init();
   MY_adc_init();
-//  my_Power_Init();
-//  getspeed1_init();
-  getspeed2_init();
+  getspeed1_init();
   myLED_Init();
-  cmt_pwm_init(50,1500);
+  Servo_Init();
 //  FTM_PWM_init(FTM0,CH2,10000,30000);
   myKEY_Init();
 //  myKEY_Init();
@@ -24,8 +22,8 @@ void System_Init()
     LCD_init(FALSE);
     Disp_single_colour(White);
   }
-  uart_init(UART5,115200);
-  UART_IRQ_EN(UART5);
+  uart_init(UART1,115200);
+//  UART_IRQ_EN(UART1);
 //  MPU_Init();					//3?：o???��MPU6050
   Brush_Color=Red;			//：|：：???│?：???ao：?：|? 
   Back_Color=White;
@@ -60,8 +58,8 @@ void Parameters_init_CAR(void)
     Image_hang.center[i] = 160;
     Image_hang.halfwidth[i] = (i-Far_Point)*(80-24)*1.0/(Start_Point-Far_Point)+24;
   }
-  Speed_stand=180;
-  PID_Init(&Servo_PID,1.32,0,0.3,0,0,150,-150);
+  Speed_stand=130;
+  PID_Init(&Servo_PID,3.4,0,0.5,0,0,492,-492);
   if((Switch_Status&3)==0)
   {
     PID_Init(&Diff_PID,0.8,0,0.23,0,0,Speed_stand,-Speed_stand);//30:0.08,40:0.09,50:0.13  limit:20

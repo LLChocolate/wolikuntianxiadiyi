@@ -19,6 +19,6 @@
 @REM 
 
 
-"E:\IAR7\common\bin\cspybat" "E:\IAR7\arm\bin\armproc.dll" "E:\IAR7\arm\bin\armjlink.dll"  %1 --plugin "E:\IAR7\arm\bin\armbat.dll" --device_macro "E:\IAR7\arm\config\debugger\Freescale\Kxx.dmac" --backend -B "--endian=little" "--cpu=Cortex-M4" "--fpu=None" "-p" "E:\IAR7\arm\CONFIG\debugger\Freescale\MK60DN512xxx10.ddf" "--semihosting" "--device=MK60DN512xxx10" "--drv_communication=USB0" "--jlink_speed=auto" "--jlink_initial_speed=32" "--jlink_reset_strategy=0,0" "--jlink_interface=SWD" "--drv_catch_exceptions=0x000" "--drv_swo_clock_setup=72000000,1,2000000" 
+"C:\Program Files (x86)\IAR Systems\Embedded Workbench 7.0\common\bin\cspybat" "C:\Program Files (x86)\IAR Systems\Embedded Workbench 7.0\arm\bin\armproc.dll" "C:\Program Files (x86)\IAR Systems\Embedded Workbench 7.0\arm\bin\armjlink.dll"  %1 --plugin "C:\Program Files (x86)\IAR Systems\Embedded Workbench 7.0\arm\bin\armbat.dll" --device_macro "C:\Program Files (x86)\IAR Systems\Embedded Workbench 7.0\arm\config\debugger\Freescale\Kxx.dmac" --backend -B "--endian=little" "--cpu=Cortex-M4" "--fpu=None" "-p" "C:\Program Files (x86)\IAR Systems\Embedded Workbench 7.0\arm\CONFIG\debugger\Freescale\MK60DN512xxx10.ddf" "--semihosting" "--device=MK60DN512xxx10" "--drv_communication=USB0" "--jlink_speed=auto" "--jlink_initial_speed=32" "--jlink_reset_strategy=0,0" "--jlink_interface=SWD" "--drv_catch_exceptions=0x000" "--drv_swo_clock_setup=72000000,1,2000000" 
 
 

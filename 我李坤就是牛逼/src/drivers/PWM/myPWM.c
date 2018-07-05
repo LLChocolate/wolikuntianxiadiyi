@@ -6,15 +6,14 @@ void Motot1_Init(void)
 }
 void Motot2_Init(void)
 {
-//  gpio_init(PORTA,12,GPO,HIGH);//DIR
+  gpio_init(PORTE,26,GPO,HIGH);//DIR
   FTM_PWM_init(MOTOR_2,1000,65530);//设置频率为10k
 }
 
-//void Steer_Init(void)
-//{
-//  FTM_PWM_init(STEER_,50,(u16)(1.5/20*65536));//初始0.5ms高电平旋转0度
-// // Time_Steer=1.5;
-//}
+void Servo_Init(void)
+{
+  FTM_PWM_init(STEER_,50,SERVO_MIDDLE);//初始0.5ms高电平旋转0度
+}
 
 void PWM_DISENABLE(FTMn ftmn, CHn ch)
 {

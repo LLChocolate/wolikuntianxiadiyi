@@ -2,16 +2,16 @@
 #define __SCCB_H
 
 
-#define SCL_H()         PTC17_OUT = 1
-#define SCL_L()         PTC17_OUT = 0
-#define	SCL_DDR_OUT() 	DDRC17 = 1
-#define	SCL_DDR_IN() 	DDRC17 = 0
+#define SCL_H()         PTB10_OUT = 1
+#define SCL_L()         PTB10_OUT = 0
+#define	SCL_DDR_OUT() 	DDRB10 = 1
+#define	SCL_DDR_IN() 	DDRB10 = 0
 
-#define SDA_H()         PTC19_OUT = 1
-#define SDA_L()         PTC19_OUT = 0
-#define SDA_IN()      	PTC19_IN
-#define SDA_DDR_OUT()	DDRC19 = 1
-#define SDA_DDR_IN()	DDRC19 = 0
+#define SDA_H()         PTC0_OUT = 1
+#define SDA_L()         PTC0_OUT = 0
+#define SDA_IN()      	PTC0_IN
+#define SDA_DDR_OUT()	DDRC0 = 1
+#define SDA_DDR_IN()	DDRC0 = 0
 
 #define ADDR_OV7725   0x42
 

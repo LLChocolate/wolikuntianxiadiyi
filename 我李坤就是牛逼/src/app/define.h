@@ -29,16 +29,16 @@ typedef enum
 
 //电机舵机
 #define MOTOR_1                         FTM0,CH4//电机接口
-#define MOTOR_2                         FTM0,CH3//电机接口
-//#define STEER_                          FTM1,CH0//舵机接口
+#define MOTOR_2                         FTM1,CH0//电机接口
+#define STEER_                          FTM0,CH6//舵机接口
 #define MOTOR1_DIR                       PTA13_OUT//电机方向控制
-#define MOTOR2_DIR                       PTA12_OUT//电机方向控制
+#define MOTOR2_DIR                       PTE26_OUT//电机方向控制
 typedef struct{
   u8 Dir;
   s16 Speed;
 }Motor_Status;          //电机状态结构体
 
-#define SERVO_MIDDLE    1462
+#define SERVO_MIDDLE    4790
 
 typedef struct
 {
@@ -50,40 +50,32 @@ Servo_Str;
 
 //ADC
 
-#define MYADC_1                          ADC0,AD13
-#define MYADC_2                          ADC0,AD12
-#define MYADC_3                          ADC1,AD10
-#define MYADC_4                          ADC0,AD13
-#define MYADC_5                          ADC1,AD15
-#define MYADC_6                          ADC1,AD13
-#define MYADC_7                          ADC1,AD10
-#define MYADC_8                          ADC0,AD12
+#define MYADC_1                          ADC1,AD4a
+#define MYADC_2                          ADC1,AD5a
+#define MYADC_3                          ADC1,AD6a
+#define MYADC_4                          ADC1,AD7a
 //拨码
 #define SW1              PTB0_IN
-#define SW2              PTA29_IN
-#define SW3              PTA28_IN
-#define SW4              PTA27_IN
-#define SW5              PTA26_IN
-#define SW6              PTA25_IN
-#define SW7              PTA24_IN
-#define SW8              PTA19_IN
+#define SW2              PTB1_IN
+#define SW3              PTB2_IN
+#define SW4              PTB3_IN
+#define SW5              PTB4_IN
+#define SW6              PTB5_IN
+#define SW7              PTB6_IN
+#define SW8              PTB7_IN
 
 //按键
-#define KEY1             PTB1_IN
+#define KEY1             PTC8_IN
 #define KEY1_PRES        1
-#define KEY2             PTA17_IN
+#define KEY2             PTC6_IN
 #define KEY2_PRES        2
-#define KEY3             PTA15_IN
-#define KEY3_PRES        3   
-#define KEY_Stop         PTD15_IN
-#define KEY_Stop_PRES    4   
 
 //蜂鸣器
-#define BEEP PTD6_OUT
+#define BEEP PTE24_OUT
 
 //流水灯
-#define LED1             PTD5_OUT
-#define LED2             PTD3_OUT
+#define LED1             PTD0_OUT
+#define LED2             PTD2_OUT
 
 
 //PID结构体
@@ -187,6 +179,8 @@ typedef struct
   u8  Correct_hang;     //用来补线的行
   int In_Center;
   u8  In2Stay_cnt;
+  
+  int Stay_Center;
   
   int Out_Center;//用作出环岛的标准
   

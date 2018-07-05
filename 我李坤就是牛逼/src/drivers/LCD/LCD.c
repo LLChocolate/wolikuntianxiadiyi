@@ -25,10 +25,10 @@ u16 Back_Color;
 *************************************************/
 void LCD_PORT_init()
 {
-  gpio_init(PORTE,12, GPO, HIGH);//dc
-  gpio_init(PORTE,11, GPO, HIGH);//rst
-  gpio_init(PORTE,10, GPO, HIGH);//sdi
-  gpio_init(PORTE,9, GPO, HIGH);//scl
+  gpio_init(PORTE,11, GPO, HIGH);//dc
+  gpio_init(PORTE,10, GPO, HIGH);//rst
+  gpio_init(PORTE,9, GPO, HIGH);//sdi
+  gpio_init(PORTE,8, GPO, HIGH);//scl
 }
 
 /************************************************
